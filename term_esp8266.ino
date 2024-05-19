@@ -3,8 +3,8 @@
 #include <WebSocketsServer.h>
 
 // Configurația WiFi
-const char* ssid = "WirLab Gabriel";
-const char* password = "29101986";
+const char* ssid = "wifi";
+const char* password = "wifi_pass";
 
 // Inițializare server web pe portul 80
 ESP8266WebServer server(80);
