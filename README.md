@@ -1,5 +1,5 @@
 Simple ESP8266 Terminal
-// Author : LineCode.Ro / @bltaln / Project_Luna
+
 
 This project implements a web-based terminal for the ESP8266 microcontroller, providing users with the ability to interact with the device through an intuitive and user-friendly interface. 
 The terminal allows sending commands and receiving information about the system's status and environment, facilitating device management and monitoring over a WiFi connection.
