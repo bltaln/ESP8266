@@ -243,7 +243,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     } else if (message == "uptime") {
       handleUptime();
     } else {
-      String response = "LineCode[%]: -> Command not implemented or found: + message + "\n";
+      String response = "LineCode[%]: -> Command not implemented or found: "+ message + "\n";
       webSocket.sendTXT(num, response);
     }
   }
