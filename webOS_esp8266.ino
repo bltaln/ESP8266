@@ -70,7 +70,7 @@ void loop() {
 // Funcție pentru a genera pagina HTML
 void handleRoot() {
     String html = "<!DOCTYPE html><html><head>";
-  html += "<title>LineCode WebOS System Developed by LineCode</title>";
+  html += "<title>WebOS ESP8266</title>";
   html += "<style>";
   html += "body { font-family: Menlo, sans-serif; background-color: #f0f0f0; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }";
   html += "h1 { color: #333; }";
@@ -85,7 +85,8 @@ void handleRoot() {
   html += ".info-container { margin-top: 20px; padding: 20px; background-color: #fff; border: 1px solid #333; width: 80%; }";
   html += "</style>";
   html += "</head><body>";
-  html += "<h1>Program Dezvoltat de LineCode - www.linecode.ro</h1>";
+  html += "<h1>LineCode WebOS System</h1>";
+  html += "<h4>Developed by www.linecode.ro</h4>"
   html += "<div id='terminal'></div>";
   html += "<input type='text' id='input' autofocus placeholder='Enter command here'>";
   html += "<div class='button-container'>";
