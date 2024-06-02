@@ -1,3 +1,10 @@
+// Author: B. Alin Gabriel
+// Website: www.linecode.ro
+// Developed with passion to bring innovative IoT solutions
+// This code is under MIT License
+// Building the future, one line of code at a time
+// Follow us for more exciting projects and updates
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
