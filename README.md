@@ -20,7 +20,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/bltaln/ESP8266/webOS_esp8266.git
+git clone https://github.com/bltaln/ESP8266.git
 cd webOS_esp8266
 Open the project in Arduino IDE:
 
