@@ -1,34 +1,75 @@
-Simple ESP8266 Terminal
-
-
-This project implements a web-based terminal for the ESP8266 microcontroller, providing users with the ability to interact with the device through an intuitive and user-friendly interface. 
-The terminal allows sending commands and receiving information about the system's status and environment, facilitating device management and monitoring over a WiFi connection.
+LineCode WebOS System
+This project provides a web-based operating system for the ESP8266 module, developed by LineCode. The system allows you to control and monitor various functions of the ESP8266 through a web interface and WebSocket communication.
 
 Features
-1. WiFi Network Scanning
-Scan WiFi: Allows scanning and displaying available WiFi networks in the vicinity of the device.
-2. System Information
-SysInfo: Provides details about the configuration and performance of the ESP8266 board, including firmware version, available memory space, CPU frequency, and flash chip information.
-3. WiFi Connection Management
-WiFi Status: Displays the current status of the WiFi connection, including the network SSID, device IP address, and signal strength.
-4. Memory Information
-Memory Info: Offers detailed information about memory usage, such as free heap space, heap fragmentation, and maximum free block size.
-5. Device Status Monitoring
-Uptime: Shows the total uptime of the device since the last boot or reset.
-6. GPIO Control (optional)
-GPIO Control: Allows users to control GPIO pins of the microcontroller to interact with external devices.
+Web Interface: Control and monitor the ESP8266 through a user-friendly HTML interface.
+WiFi Scanning: Scan for nearby WiFi networks and display their signal strengths.
+System Information: Retrieve and display system and hardware information.
+Restart: Remotely restart the ESP8266 module.
+WiFi Status: Display the current WiFi SSID, IP address, and signal strength.
+Memory Information: Provide details about free heap memory, heap fragmentation, and maximum free block size.
+Uptime: Display the total uptime of the ESP8266 module in seconds.
+GPIO Control: Control GPIO pins through WebSocket commands.
+Getting Started
+Prerequisites
+ESP8266 module (e.g., NodeMCU, Wemos D1 Mini)
+Arduino IDE with ESP8266 board support installed
+WiFi network credentials
+Installation
+Clone the repository:
 
-Usage :
-Connect to WiFi Network: Ensure that the ESP8266 device is connected to an available WiFi network.
-Accessing the Terminal: Open a web browser and enter the IP address of the ESP8266 device in the address bar.
-Interacting with the Terminal: Use the available buttons to send commands and receive information about the system's status and environment.
-Monitoring and Managing the Device: Utilize the provided information to monitor the device's status and perform management actions, such as rebooting or monitoring the WiFi connection.
-Through this web-based terminal, users can quickly and easily access information about the ESP8266 device and perform management actions without requiring a direct physical connection to the device.
+bash
+Copy code
+git clone https://github.com/bltaln/ESP8266/webOS_esp8266.git
+cd webOS_esp8266
+Open the project in Arduino IDE:
 
+Launch the Arduino IDE.
+Open the linecode-webos-system.ino file from the cloned repository.
+Configure WiFi credentials:
+
+In the webOS_esp8266.ino file, update the ssid and password variables with your WiFi network credentials:
+cpp
+Copy code
+const char* ssid = "Your_SSID";
+const char* password = "Your_Password";
+Select the ESP8266 board:
+
+Go to Tools > Board > ESP8266 Boards and select your ESP8266 module (e.g., NodeMCU 1.0, Wemos D1 Mini).
+Upload the code:
+
+Connect your ESP8266 to your computer via USB.
+Select the appropriate COM port under Tools > Port.
+Click the upload button in the Arduino IDE to flash the code to the ESP8266.
+Usage
+Connect to WiFi:
+
+After uploading the code, open the Serial Monitor (set the baud rate to 230400) to view the connection process.
+The ESP8266 will attempt to connect to the specified WiFi network.
+Once connected, the IP address of the ESP8266 will be displayed in the Serial Monitor.
+Access the Web Interface:
+
+Open a web browser and navigate to the IP address displayed in the Serial Monitor.
+The web interface will be loaded, displaying various control buttons and information sections.
+Web Interface Commands:
+
+Scan WiFi: Click the "Scan WiFi" button to scan for nearby WiFi networks.
+SysInfo: Click the "SysInfo" button to retrieve and display system information.
+Restart: Click the "Restart" button to restart the ESP8266 module.
+WiFi Status: Click the "WiFi Status" button to display current WiFi details.
+Memory Info: Click the "Memory Info" button to get information about memory usage.
+Uptime: Click the "Uptime" button to view the total uptime of the module.
+GPIO Control: Send a command in the format gpioX (where X is the GPIO pin number) to toggle the state of a GPIO pin.
+Code Overview
+The main components of the code include:
+
+WiFi Configuration: Connects the ESP8266 to a specified WiFi network.
+Web Server Initialization: Sets up the HTTP server to serve the web interface and handle various requests.
+WebSocket Initialization: Sets up a WebSocket server to handle real-time communication between the web interface and the ESP8266.
+Request Handlers: Functions to handle different commands such as scanning WiFi, retrieving system info, restarting the module, etc.
+WebSocket Event Handling: Processes incoming WebSocket messages and executes corresponding functions.
 Contributing
+Contributions are welcome! Feel free to open issues or submit pull requests with improvements.
 
-Contributions to improve and enhance this codebase are welcome! 
-If you have any ideas, suggestions, or improvements, feel free to open an issue or submit a pull request. 
-Your contributions can help make this project even better.
-
-Feel free to adjust the wording or formatting to better suit your preferences!
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
