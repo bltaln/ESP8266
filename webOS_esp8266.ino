@@ -3,8 +3,8 @@
 #include <WebSocketsServer.h>
 
 // Configurația WiFi
-const char* ssid = "wifi";
-const char* password = "wifi_pass";
+const char* ssid = "WiFi";
+const char* password = "WiFi Password";
 
 // Inițializare server web pe portul 80
 ESP8266WebServer server(80);
@@ -22,20 +22,20 @@ void handleUptime();
 
 void setup() {
   // Inițializare consola serială
-  Serial.begin(115200);
+  Serial.begin(230400);
   Serial.println();
-  Serial.println("LineCode / Project_Luna");
+  Serial.println("LineCode WebOS System - www.linecode.ro");
 
   // Conectare la WiFi
   WiFi.begin(ssid, password);
-  Serial.print("Connecting WiFi ...");
+  Serial.print("Connecting on WiFi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.print(".");
   }
   Serial.println();
-  Serial.println("Connected on WiFi");
-  Serial.print("IP: ");
+  Serial.println("Connected ...");
+  Serial.print("IP is: ");
   Serial.println(WiFi.localIP());
 
   // Configurare server web
@@ -47,12 +47,12 @@ void setup() {
   server.on("/memory_info", handleMemoryInfo);
   server.on("/uptime", handleUptime);
   server.begin();
-  Serial.println("Server Online...");
+  Serial.println("Server: Status OK");
 
   // Configurare WebSocket
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
-  Serial.println("WebSocket Online...");
+  Serial.println("WebSocket: Status OK  ");
 }
 
 void loop() {
@@ -63,7 +63,7 @@ void loop() {
 // Funcție pentru a genera pagina HTML
 void handleRoot() {
     String html = "<!DOCTYPE html><html><head>";
-  html += "<title>ESP8266 Terminal</title>";
+  html += "<title>LineCode WebOS System Developed by LineCode</title>";
   html += "<style>";
   html += "body { font-family: Menlo, sans-serif; background-color: #f0f0f0; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }";
   html += "h1 { color: #333; }";
@@ -72,9 +72,13 @@ void handleRoot() {
   html += ".button-container { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 10px; }";
   html += ".button { padding: 10px 20px; margin: 5px; background-color: #ccc; color: #008000; border: none; cursor: pointer; display: inline-block; }";
   html += ".button:hover { background-color: #0056b3; }";
+  html += ".menu-container { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; }";
+  html += ".menu-item { cursor: pointer; padding: 10px; background-color: #ccc; margin: 5px; display: inline-block; }";
+  html += ".menu-item:hover { background-color: #0056b3; color: #fff; }";
+  html += ".info-container { margin-top: 20px; padding: 20px; background-color: #fff; border: 1px solid #333; width: 80%; }";
   html += "</style>";
   html += "</head><body>";
-  html += "<h1>ESP8266 Terminal</h1>";
+  html += "<h1>Program Dezvoltat de LineCode - www.linecode.ro</h1>";
   html += "<div id='terminal'></div>";
   html += "<input type='text' id='input' autofocus placeholder='Enter command here'>";
   html += "<div class='button-container'>";
@@ -85,6 +89,15 @@ void handleRoot() {
   html += "<button class='button' onclick='sendCommand(\"memory_info\")'>Memory Info</button>";
   html += "<button class='button' onclick='sendCommand(\"uptime\")'>Uptime</button>";
   html += "</div>";
+  html += "<div class='menu-container'>";
+  html += "<div class='menu-item' onclick='showInfo(\"scan_wifi\")'>Scan WiFi Info</div>";
+  html += "<div class='menu-item' onclick='showInfo(\"sysinfo\")'>SysInfo Info</div>";
+  html += "<div class='menu-item' onclick='showInfo(\"restart\")'>Restart Info</div>";
+  html += "<div class='menu-item' onclick='showInfo(\"wifi_status\")'>WiFi Status Info</div>";
+  html += "<div class='menu-item' onclick='showInfo(\"memory_info\")'>Memory Info</div>";
+  html += "<div class='menu-item' onclick='showInfo(\"uptime\")'>Uptime Info</div>";
+  html += "</div>";
+  html += "<div class='info-container' id='info'></div>";
   html += "<script>";
   html += "var gateway = `ws://${window.location.hostname}:81/`;";
   html += "var websocket;";
@@ -109,6 +122,23 @@ void handleRoot() {
   html += "function onMessage(event) { document.getElementById('terminal').innerHTML += event.data + '\\n'; }";
   html += "function sendMessage(message) { websocket.send(message); }";
   html += "function sendCommand(command) { websocket.send(command); }";
+  html += "function showInfo(command) {";
+  html += "  var info = '';";
+  html += "  if (command === 'scan_wifi') {";
+  html += "    info = 'Scan WiFi: This command scans the nearby WiFi networks and lists them with their signal strengths.';";
+  html += "  } else if (command === 'sysinfo') {";
+  html += "    info = 'SysInfo: This command provides system information including firmware version, free heap memory, CPU frequency, flash chip size, and flash chip speed.';";
+  html += "  } else if (command === 'restart') {";
+  html += "    info = 'Restart: This command restarts the ESP8266 module.';";
+  html += "  } else if (command === 'wifi_status') {";
+  html += "    info = 'WiFi Status: This command displays the current WiFi SSID, IP address, and signal strength.';";
+  html += "  } else if (command === 'memory_info') {";
+  html += "    info = 'Memory Info: This command provides information about the free heap memory, heap fragmentation, and maximum free block size.';";
+  html += "  } else if (command === 'uptime') {";
+  html += "    info = 'Uptime: This command shows the total uptime of the ESP8266 module in seconds.';";
+  html += "  }";
+  html += "  document.getElementById('info').innerText = info;";
+  html += "}";
   html += "</script>";
   html += "</body></html>";
   server.send(200, "text/html", html);
@@ -116,10 +146,10 @@ void handleRoot() {
 
 // Funcție pentru a gestiona comanda "scan_wifi"
 void handleScanWifi() {
-  String networks = "Available WiFi networks:\n";
+  String networks = "LineCode Scanner V.1 : Scanning WiFi ...\n";
   int numNetworks = WiFi.scanNetworks();
   if (numNetworks == 0) {
-    networks += "No WiFi networks found.\n";
+    networks += "LineCode Scanner V.1 : No WiFi Found :(\n";
   } else {
     for (int i = 0; i < numNetworks; ++i) {
       networks += String(i+1) + ". " + String(WiFi.SSID(i)) + " (" + String(WiFi.RSSI(i)) + " dBm)\n";
@@ -131,19 +161,19 @@ void handleScanWifi() {
 
 // Funcție pentru a gestiona comanda "sysinfo"
 void handleSysInfo() {
-  String response = "ESP8266 Board Information:\n";
+  String response = "System / Hardware Info:\n";
   response += "Firmware: " + String(ESP.getCoreVersion()) + "\n";
   response += "Free Heap: " + String(ESP.getFreeHeap()) + " bytes\n";
   response += "CPU Frequency: " + String(ESP.getCpuFreqMHz()) + " MHz\n";
   response += "Flash Chip Size: " + String(ESP.getFlashChipSize() / 1024) + " KB\n";
   response += "Flash Chip Speed: " + String(ESP.getFlashChipSpeed() / 1000000) + " MHz\n";
-  webSocket.sendTXT(0, response); // Trimite informațiile despre placa ESP8266 către clientul WebSocket
+  webSocket.sendTXT(0, response); // Trimite informațiile despre placa către clientul WebSocket
   server.send(200, "text/plain", response); // Trimite informațiile și prin HTTP
 }
 
 // Funcție pentru a gestiona comanda "restart"
 void handleRestart() {
-  String response = "Restarting ESP8266 Board ...\n";
+  String response = "Restarting System Board ...\n";
   webSocket.sendTXT(0, response);
   server.send(200, "text/plain", response);
   delay(1000);
@@ -152,10 +182,10 @@ void handleRestart() {
 
 // Funcție pentru a gestiona comanda "wifi_status"
 void handleWifiStatus() {
-  String response = "WiFi Status:\n";
-  response += "SSID: " + WiFi.SSID() + "\n";
-  response += "IP Address: " + WiFi.localIP().toString() + "\n";
-  response += "Signal Strength: " + String(WiFi.RSSI()) + " dBm\n";
+  String response = "LineCode Scanner V.1 : Found WiFi :):\n";
+  response += "The name of SSID: " + WiFi.SSID() + "\n";
+  response += "IP is: " + WiFi.localIP().toString() + "\n";
+  response += "Signal of WiFi: " + String(WiFi.RSSI()) + " dBm\n";
   webSocket.sendTXT(0, response);
   server.send(200, "text/plain", response);
 }
@@ -206,7 +236,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     } else if (message == "uptime") {
       handleUptime();
     } else {
-      String response = "Comanda primită: " + message + "\n";
+      String response = "LineCode[%]: -> Command not implemented or found: + message + "\n";
       webSocket.sendTXT(num, response);
     }
   }
