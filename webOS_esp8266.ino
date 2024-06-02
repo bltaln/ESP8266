@@ -86,7 +86,7 @@ void handleRoot() {
   html += "</style>";
   html += "</head><body>";
   html += "<h1>LineCode WebOS System</h1>";
-  html += "<h4>Developed by www.linecode.ro</h4>"
+  html += "<h4>Developed by www.linecode.ro</h4>";
   html += "<div id='terminal'></div>";
   html += "<input type='text' id='input' autofocus placeholder='Enter command here'>";
   html += "<div class='button-container'>";
