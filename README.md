@@ -21,7 +21,7 @@ Clone the repository:
 bash
 Copy code
 git clone https://github.com/bltaln/ESP8266.git
-cd webOS_esp8266
+cd ESP8266
 Open the project in Arduino IDE:
 
 Launch the Arduino IDE.
